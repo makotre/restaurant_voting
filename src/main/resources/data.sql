@@ -7,3 +7,17 @@ INSERT INTO USER_ROLE (role, user_id)
 VALUES ('USER', 1),
        ('ADMIN', 2),
        ('USER', 2);
+
+INSERT INTO RESTAURANT (name, voters_count)
+VALUES ('MacDac', 2),
+       ('KeeFCi', 1);
+
+INSERT INTO DISH (name, price, restaurant_id)
+VALUES ('Breakfast', 50, 1),
+       ('Lunch', 10, 1),
+       ('AfterLunch', 50, 1),
+       ('Soop', 60, 1),
+       ('Potato', 30, 1),
+       ('Chachapuri', 15, 2),
+       ('Tea', 10, 2),
+       ('Coffee', 15, 2);
