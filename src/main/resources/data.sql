@@ -9,8 +9,8 @@ VALUES ('USER', 1),
        ('USER', 2);
 
 INSERT INTO RESTAURANT (name, voters_count)
-VALUES ('MacDac', 2),
-       ('KeeFCi', 1);
+VALUES ('MacDac', 0),
+       ('KeeFCi', 0);
 
 INSERT INTO DISH (name, price, restaurant_id)
 VALUES ('Breakfast', 50, 1),

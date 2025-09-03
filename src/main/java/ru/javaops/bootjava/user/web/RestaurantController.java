@@ -24,7 +24,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 @RestController
 @RequestMapping(value = RestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController {
-    static final String REST_URL = "/api/admin/restaurant";
+    static final String REST_URL = "/api";
 
     protected final Logger log = getLogger(getClass());
 
@@ -34,13 +34,13 @@ public class RestaurantController {
     @Autowired
     private RestaurantService service;
 
-    @GetMapping("/{id}")
+    @GetMapping("/restaurants/{id}")
     public Restaurant get(@PathVariable int id) {
         log.info("get restaurant {}", id);
         return repository.getExisted(id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("admin/restaurants/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
         log.info("delete restaurant {} by user {}", id, authUser.id());
@@ -48,13 +48,13 @@ public class RestaurantController {
         repository.delete(restaurant);
     }
 
-    @GetMapping
+    @GetMapping("/restaurants")
     public List<Restaurant> getAll() {
         log.info("getAll restaurants");
         return repository.findAll();
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "admin/restaurants", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Restaurant> createWithLocation(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody Restaurant restaurant) {
         log.info("create {} by user {}", restaurant, authUser.id());
@@ -65,7 +65,7 @@ public class RestaurantController {
         return ResponseEntity.created(uriOfNewResponse).body(created);
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "admin/restaurants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
         log.info("update {} by user {}", restaurant, authUser.id());
@@ -73,12 +73,11 @@ public class RestaurantController {
         service.save(authUser, restaurant);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("restaurants/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
-    public void vote(@PathVariable int id, @RequestParam boolean vote) {
+    public void vote(@PathVariable int id, @RequestParam boolean vote, @AuthenticationPrincipal AuthUser authUser) {
         log.info(vote ? "vote {}" : "unvote {}", id);
-        Restaurant restaurant = repository.getExisted(id);
-        restaurant.setVote(vote);
+        service.vote(id, vote, authUser);
     }
 }
