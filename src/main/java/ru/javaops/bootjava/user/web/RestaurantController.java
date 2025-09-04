@@ -42,10 +42,9 @@ public class RestaurantController {
 
     @DeleteMapping("admin/restaurants/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
-        log.info("delete restaurant {} by user {}", id, authUser.id());
-        Restaurant restaurant = service.delete(authUser, id);
-        repository.delete(restaurant);
+    public void delete(@PathVariable int id) {
+        log.info("delete restaurant {}", id);
+        repository.deleteExisted(id);
     }
 
     @GetMapping("/restaurants")
@@ -56,28 +55,30 @@ public class RestaurantController {
 
     @PostMapping(value = "admin/restaurants", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Restaurant> createWithLocation(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody Restaurant restaurant) {
-        log.info("create {} by user {}", restaurant, authUser.id());
+    @Transactional
+    public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
+        log.info("create {}", restaurant);
         ValidationUtil.checkNew(restaurant);
-        Restaurant created = service.save(authUser, restaurant);
+        Restaurant created = repository.save(restaurant);;
         URI uriOfNewResponse = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL).build().toUri();
+                .path(REST_URL + "admin/restaurants/{id}").build().toUri();
         return ResponseEntity.created(uriOfNewResponse).body(created);
     }
 
     @PutMapping(value = "admin/restaurants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
-        log.info("update {} by user {}", restaurant, authUser.id());
+    @Transactional
+    public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
+        log.info("update {}", restaurant);
         ValidationUtil.assureIdConsistent(restaurant, id);
-        service.save(authUser, restaurant);
+        repository.save(restaurant);
     }
 
     @PatchMapping("restaurants/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
     public void vote(@PathVariable int id, @RequestParam boolean vote, @AuthenticationPrincipal AuthUser authUser) {
-        log.info(vote ? "vote {}" : "unvote {}", id);
+        log.info("user {} " + (vote ? "vote restaurant {}" : "unvote restaurant {}"), authUser.id(), id);
         service.vote(id, vote, authUser);
     }
 }

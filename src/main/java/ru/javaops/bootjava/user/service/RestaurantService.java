@@ -27,24 +27,6 @@ public class RestaurantService {
 
     private final VoteRepository voteRepository;
 
-    public void checkAdmin(AuthUser authUser) {
-        if (!authUser.hasRole(Role.ADMIN)) {
-            throw new DataConflictException("User id=" + authUser.id() + " is not an Admin");
-        }
-    }
-
-    public Restaurant delete(AuthUser authUser, int id) {
-        checkAdmin(authUser);
-        return repository.findById(id).orElseThrow(
-                () -> new NotFoundException("Restaurant id=" + id + " is not exist"));
-    }
-
-    @Transactional
-    public Restaurant save(AuthUser authUser, Restaurant restaurant) {
-        checkAdmin(authUser);
-        return repository.save(restaurant);
-    }
-
     public void vote(int id, boolean vote, AuthUser authUser) {
         Restaurant restaurant = repository.getExisted(id);
         User user = userRepository.getExisted(authUser.id());
@@ -67,7 +49,7 @@ public class RestaurantService {
             }
         } else {
             LocalDateTime now = LocalDateTime.now();
-            if (now.toLocalTime().isBefore(LocalTime.of(14, 0))) {
+            if (now.toLocalTime().isBefore(LocalTime.of(11, 0))) {
                 if (!todaysVote.getRestaurant().equals(restaurant)) {
                     if (vote) {
                         if (todaysVote.isTheVote()) {

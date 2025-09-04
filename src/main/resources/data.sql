@@ -12,7 +12,7 @@ INSERT INTO RESTAURANT (name, voters_count)
 VALUES ('MacDac', 0),
        ('KeeFCi', 0);
 
-INSERT INTO DISH (name, price, restaurant_id)
+INSERT INTO DISH (name, price, r_id)
 VALUES ('Breakfast', 50, 1),
        ('Lunch', 10, 1),
        ('AfterLunch', 50, 1),

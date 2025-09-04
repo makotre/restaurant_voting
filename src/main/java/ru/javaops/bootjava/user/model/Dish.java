@@ -21,7 +21,7 @@ public class Dish extends NamedEntity {
     private int price;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id", nullable = false)
+    @JoinColumn(name = "r_id", nullable = false)
     @JsonIgnore
     private Restaurant restaurant;
 
