@@ -2,12 +2,9 @@ package ru.javaops.bootjava.user.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.javaops.bootjava.app.AuthUser;
 import ru.javaops.bootjava.common.error.DataConflictException;
-import ru.javaops.bootjava.common.error.NotFoundException;
 import ru.javaops.bootjava.user.model.Restaurant;
-import ru.javaops.bootjava.user.model.Role;
 import ru.javaops.bootjava.user.model.User;
 import ru.javaops.bootjava.user.model.Vote;
 import ru.javaops.bootjava.user.repository.RestaurantRepository;

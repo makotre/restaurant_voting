@@ -59,7 +59,7 @@ public class RestaurantController {
     public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
         log.info("create {}", restaurant);
         ValidationUtil.checkNew(restaurant);
-        Restaurant created = repository.save(restaurant);;
+        Restaurant created = repository.save(restaurant);
         URI uriOfNewResponse = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "admin/restaurants/{id}").build().toUri();
         return ResponseEntity.created(uriOfNewResponse).body(created);
