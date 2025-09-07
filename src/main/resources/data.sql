@@ -12,12 +12,12 @@ INSERT INTO RESTAURANT (name, voters_count)
 VALUES ('MacDac', 0),
        ('KeeFCi', 0);
 
-INSERT INTO DISH (name, price, r_id)
-VALUES ('Breakfast', 50, 1),
-       ('Lunch', 10, 1),
-       ('AfterLunch', 50, 1),
-       ('Soop', 60, 1),
-       ('Potato', 30, 1),
-       ('Chachapuri', 15, 2),
-       ('Tea', 10, 2),
-       ('Coffee', 15, 2);
+INSERT INTO DISH (name, price, r_id, create_date)
+VALUES ('Breakfast', 50, 1, NOW()),
+       ('Lunch', 10, 1, NOW()),
+       ('AfterLunch', 50, 1, NOW()),
+       ('Soop', 60, 1, NOW()),
+       ('Potato', 30, 1, NOW()),
+       ('Chachapuri', 15, 2, NOW()),
+       ('Tea', 10, 2, NOW()),
+       ('Coffee', 15, 2, NOW());

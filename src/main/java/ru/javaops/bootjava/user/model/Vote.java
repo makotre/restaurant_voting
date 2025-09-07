@@ -10,7 +10,7 @@ import ru.javaops.bootjava.common.model.BaseEntity;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "vote")
+@Table(name = "vote", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date_time"}, name = "vote_unique_user_datetime_idx")})
 @Getter
 @Setter
 @NoArgsConstructor
