@@ -1,6 +1,7 @@
 package ru.javaops.bootjava.user.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.javaops.bootjava.app.AuthUser;
 import ru.javaops.bootjava.common.error.DataConflictException;
@@ -11,6 +12,7 @@ import ru.javaops.bootjava.user.repository.RestaurantRepository;
 import ru.javaops.bootjava.user.repository.UserRepository;
 import ru.javaops.bootjava.user.repository.VoteRepository;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -23,6 +25,9 @@ public class RestaurantService {
     private final UserRepository userRepository;
 
     private final VoteRepository voteRepository;
+
+    @Autowired
+    private Clock clock;
 
     public void vote(int id, boolean vote, AuthUser authUser) {
         Restaurant restaurant = repository.getExisted(id);
@@ -45,7 +50,7 @@ public class RestaurantService {
                 user.getVotes().add(todaysVote);
             }
         } else {
-            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime now = LocalDateTime.now(clock);
             if (now.toLocalTime().isBefore(LocalTime.of(11, 0))) {
                 if (!todaysVote.getRestaurant().equals(restaurant)) {
                     if (vote) {

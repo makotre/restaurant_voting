@@ -40,7 +40,7 @@ public class RestaurantController {
         return repository.getExisted(id);
     }
 
-    @DeleteMapping("admin/restaurants/{id}")
+    @DeleteMapping("/admin/restaurants/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         log.info("delete restaurant {}", id);
@@ -53,7 +53,7 @@ public class RestaurantController {
         return repository.findAll();
     }
 
-    @PostMapping(value = "admin/restaurants", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/admin/restaurants", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
     public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
@@ -65,7 +65,7 @@ public class RestaurantController {
         return ResponseEntity.created(uriOfNewResponse).body(created);
     }
 
-    @PutMapping(value = "admin/restaurants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/admin/restaurants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
     public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
@@ -74,7 +74,7 @@ public class RestaurantController {
         repository.save(restaurant);
     }
 
-    @PatchMapping("restaurants/{id}")
+    @PatchMapping("/restaurants/vote/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
     public void vote(@PathVariable int id, @RequestParam boolean vote, @AuthenticationPrincipal AuthUser authUser) {

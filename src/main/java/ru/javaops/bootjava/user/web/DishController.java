@@ -46,7 +46,7 @@ public class DishController {
         return dishRepository.getBelonged(id, rId);
     }
 
-    @DeleteMapping("admin/restaurants/{rId}/dishes/{id}")
+    @DeleteMapping("/admin/restaurants/{rId}/dishes/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int rId, @PathVariable int id) {
         log.info("delete dish {} in restaurant {}", id, rId);
@@ -55,7 +55,7 @@ public class DishController {
         dishRepository.delete(dish);
     }
 
-    @PostMapping(value = "admin/restaurants/{rId}/dishes", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/admin/restaurants/{rId}/dishes", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
     public ResponseEntity<Dish> createWithLocation(@Valid @RequestBody Dish dish, @PathVariable int rId) {
@@ -68,7 +68,7 @@ public class DishController {
         return ResponseEntity.created(uriOfNewResponse).body(created);
     }
 
-    @PutMapping(value = "admin/restaurants/{rId}/dishes/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/admin/restaurants/{rId}/dishes/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
     public void update(@Valid @RequestBody Dish dish, @PathVariable int rId, @PathVariable int id) {
