@@ -87,7 +87,7 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     void update() throws Exception {
         Restaurant updated = getUpdated();
-        ResultActions action = perform(MockMvcRequestBuilders.put(REST_URL_SLASH_ADMIN + R1_ID)
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH_ADMIN + R1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
@@ -139,8 +139,9 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     void updateHtmlUnsafe() throws Exception {
         Restaurant updated = new Restaurant(restaurant1);
         updated.setName("<script>alert(123)</script>");
-        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + R1_ID)
-                .contentType(MediaType.APPLICATION_JSON))
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH_ADMIN + R1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
     }
