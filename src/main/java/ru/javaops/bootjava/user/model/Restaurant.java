@@ -1,5 +1,6 @@
 package ru.javaops.bootjava.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -29,6 +30,7 @@ public class Restaurant extends NamedEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @Schema(hidden = true)
+    @JsonIgnore
     private List<Dish> dishes;
 
     @Column(name = "create_date", nullable = false, columnDefinition = "timestamp default now()", updatable = false)

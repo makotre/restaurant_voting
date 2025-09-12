@@ -1,5 +1,6 @@
 package ru.javaops.bootjava.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -31,6 +32,7 @@ public class Dish extends NamedEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "r_id", nullable = false)
     @Schema(hidden = true)
+    @JsonIgnore
     private Restaurant restaurant;
 
     public Dish(Integer id, String name, int price) {

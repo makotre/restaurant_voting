@@ -1,5 +1,8 @@
 package ru.javaops.bootjava.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -18,10 +21,14 @@ public class Vote extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @Schema(hidden = true)
+    @JsonIgnore
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
+    @Schema(hidden = true)
+    @JsonIgnore
     private Restaurant restaurant;
 
     @Column(name = "date_time", nullable = false)
@@ -38,5 +45,14 @@ public class Vote extends BaseEntity {
         this.restaurant = restaurant;
         this.dateTimeVoted = dateTimeVoted;
         this.theVote = theVote;
+    }
+
+    @JsonProperty("userId")
+    public Integer getUserId() {
+        return user != null ? user.getId() : null;
+    }
+    @JsonProperty("restaurantId")
+    public Integer getRestaurantId() {
+        return restaurant != null ? restaurant.getId() : null;
     }
 }
