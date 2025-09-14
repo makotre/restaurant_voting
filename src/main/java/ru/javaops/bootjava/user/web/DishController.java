@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaops.bootjava.common.validation.ValidationUtil;
 import ru.javaops.bootjava.user.model.Dish;
+import ru.javaops.bootjava.user.model.Restaurant;
 import ru.javaops.bootjava.user.repository.DishRepository;
 import ru.javaops.bootjava.user.repository.RestaurantRepository;
+import ru.javaops.bootjava.user.service.RestaurantService;
 
 import java.net.URI;
 import java.util.List;
@@ -31,6 +33,9 @@ public class DishController {
 
     @Autowired
     private RestaurantRepository repository;
+
+    @Autowired
+    private RestaurantService restaurantService;
 
     @GetMapping("/restaurants/{rId}/dishes")
     public List<Dish> getAll(@PathVariable int rId) {
@@ -61,7 +66,9 @@ public class DishController {
     public ResponseEntity<Dish> createWithLocation(@Valid @RequestBody Dish dish, @PathVariable int rId) {
         log.info("create dish {} in restaurant {}", dish, rId);
         ValidationUtil.checkNew(dish);
-        dish.setRestaurant(repository.getExisted(rId));
+        Restaurant restaurant = repository.getExisted(rId);
+        restaurantService.checkFromToday(restaurant);
+        dish.setRestaurant(restaurant);
         Dish created = dishRepository.save(dish);
         URI uriOfNewResponse = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "admin/restaurants/{rId}/dishes/{id}").build().toUri();
@@ -74,7 +81,9 @@ public class DishController {
     public void update(@Valid @RequestBody Dish dish, @PathVariable int rId, @PathVariable int id) {
         log.info("update dish {} in restaurant {}", dish, rId);
         ValidationUtil.assureIdConsistent(dish, id);
-        dish.setRestaurant(repository.getExisted(rId));
+        Restaurant restaurant = repository.getExisted(rId);
+        restaurantService.checkFromToday(restaurant);
+        dish.setRestaurant(restaurant);
         dishRepository.getBelonged(id, rId);
         dishRepository.save(dish);
     }

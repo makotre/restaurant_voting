@@ -25,7 +25,8 @@ public class Restaurant extends NamedEntity {
 
     @Column(name = "voters_count", nullable = false)
     @NotNull
-    private Integer votersCount;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Integer votersCount = 0;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OnDelete(action = OnDeleteAction.CASCADE)

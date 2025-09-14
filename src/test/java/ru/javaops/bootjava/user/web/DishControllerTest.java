@@ -13,7 +13,11 @@ import ru.javaops.bootjava.common.util.JsonUtil;
 import ru.javaops.bootjava.user.model.Dish;
 import ru.javaops.bootjava.user.repository.DishRepository;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -183,6 +187,38 @@ public class DishControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.put(REST_URL_SLASH_ADMIN + DISH1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(duplicate)))
+                .andDo(print())
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void createForAnotherDay() throws Exception {
+        when(clock.instant()).thenReturn(LocalDateTime.now().minusDays(1)
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
+        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
+
+        Dish dish = new Dish(null, dish1.getName(), 10);
+        perform(MockMvcRequestBuilders.post(REST_URL + "/admin/restaurants/1/dishes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(dish)))
+                .andDo(print())
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void updateForAnotherDay() throws Exception {
+        when(clock.instant()).thenReturn(LocalDateTime.now().minusDays(1)
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
+        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
+
+        Dish updated = getUpdated();
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH_ADMIN + DISH1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
                 .andExpect(status().isConflict());
     }

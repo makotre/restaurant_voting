@@ -13,6 +13,7 @@ import ru.javaops.bootjava.user.repository.UserRepository;
 import ru.javaops.bootjava.user.repository.VoteRepository;
 
 import java.time.Clock;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -31,6 +32,8 @@ public class RestaurantService {
 
     public void vote(int id, boolean vote, AuthUser authUser) {
         Restaurant restaurant = repository.getExisted(id);
+        checkFromToday(restaurant);
+
         User user = userRepository.getExisted(authUser.id());
 
         Vote todaysVote = user.getVotes().stream()
@@ -77,6 +80,12 @@ public class RestaurantService {
             } else {
                 throw new DataConflictException("it is too late, vote can't be changed");
             }
+        }
+    }
+
+    public void checkFromToday(Restaurant restaurant) {
+        if (!restaurant.getCreateDate().equals(LocalDate.now(clock))) {
+            throw new DataConflictException("restaurant id=" + restaurant.getId() + " is not available today");
         }
     }
 }

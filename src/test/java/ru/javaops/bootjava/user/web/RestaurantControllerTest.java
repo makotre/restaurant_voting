@@ -2,7 +2,6 @@ package ru.javaops.bootjava.user.web;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
@@ -12,8 +11,8 @@ import ru.javaops.bootjava.common.util.JsonUtil;
 import ru.javaops.bootjava.user.model.Restaurant;
 import ru.javaops.bootjava.user.repository.RestaurantRepository;
 
-import java.time.Clock;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,9 +34,6 @@ public class RestaurantControllerTest extends AbstractControllerTest {
 
     @Autowired
     private RestaurantRepository repository;
-
-    @MockBean
-    private Clock clock;
 
     @Test
     @WithUserDetails(value = USER_MAIL)
@@ -166,6 +162,21 @@ public class RestaurantControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void voteForAnotherDay() throws Exception {
+        when(clock.instant()).thenReturn(LocalDateTime.now().plusDays(1)
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
+        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
+
+        perform(MockMvcRequestBuilders.patch(REST_URL_SLASH + "vote/" + R1_ID)
+                .param("vote", "true")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isConflict());
     }
 
     @Test
