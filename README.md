@@ -1,3 +1,5 @@
+# [link to the Technical requirement](https://github.com/JavaOPs/topjava/blob/master/graduation.md)
+
 <img src="http://javaops.ru/static/img/logo/javaops_30.png" width="223"/>
 
 Открытый курс для всех желающих приобщиться к живой современной разработке на Java
