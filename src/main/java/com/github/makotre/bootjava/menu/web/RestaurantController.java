@@ -1,4 +1,4 @@
-package com.github.makotre.bootjava.user.web;
+package com.github.makotre.bootjava.menu.web;
 
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.github.makotre.bootjava.app.AuthUser;
 import com.github.makotre.bootjava.common.validation.ValidationUtil;
-import com.github.makotre.bootjava.user.model.Restaurant;
-import com.github.makotre.bootjava.user.repository.RestaurantRepository;
-import com.github.makotre.bootjava.user.service.RestaurantService;
+import com.github.makotre.bootjava.menu.model.Restaurant;
+import com.github.makotre.bootjava.menu.repository.RestaurantRepository;
+import com.github.makotre.bootjava.menu.service.RestaurantService;
 
 import java.net.URI;
 import java.util.List;

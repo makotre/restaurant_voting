@@ -1,4 +1,4 @@
-package com.github.makotre.bootjava.user.web;
+package com.github.makotre.bootjava.menu.web;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import com.github.makotre.bootjava.AbstractControllerTest;
 import com.github.makotre.bootjava.common.util.JsonUtil;
-import com.github.makotre.bootjava.user.model.Dish;
-import com.github.makotre.bootjava.user.repository.DishRepository;
+import com.github.makotre.bootjava.menu.model.Dish;
+import com.github.makotre.bootjava.menu.repository.DishRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -21,11 +21,11 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.github.makotre.bootjava.user.DishTestData.*;
-import static com.github.makotre.bootjava.user.DishTestData.getNew;
-import static com.github.makotre.bootjava.user.DishTestData.getUpdated;
+import static com.github.makotre.bootjava.menu.DishTestData.*;
+import static com.github.makotre.bootjava.menu.DishTestData.getNew;
+import static com.github.makotre.bootjava.menu.DishTestData.getUpdated;
 import static com.github.makotre.bootjava.user.UserTestData.*;
-import static com.github.makotre.bootjava.user.web.DishController.REST_URL;
+import static com.github.makotre.bootjava.menu.web.DishController.REST_URL;
 
 public class DishControllerTest extends AbstractControllerTest {
 

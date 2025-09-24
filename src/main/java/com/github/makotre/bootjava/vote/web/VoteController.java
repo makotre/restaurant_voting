@@ -1,4 +1,4 @@
-package com.github.makotre.bootjava.user.web;
+package com.github.makotre.bootjava.vote.web;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,8 +6,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.github.makotre.bootjava.user.model.Vote;
-import com.github.makotre.bootjava.user.repository.VoteRepository;
+import com.github.makotre.bootjava.vote.model.Vote;
+import com.github.makotre.bootjava.vote.repository.VoteRepository;
 
 import java.util.List;
 

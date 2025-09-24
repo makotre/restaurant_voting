@@ -1,11 +1,11 @@
-package com.github.makotre.bootjava.user.repository;
+package com.github.makotre.bootjava.menu.repository;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 import com.github.makotre.bootjava.common.BaseRepository;
 import com.github.makotre.bootjava.common.error.DataConflictException;
 import com.github.makotre.bootjava.common.error.NotFoundException;
-import com.github.makotre.bootjava.user.model.Dish;
+import com.github.makotre.bootjava.menu.model.Dish;
 
 import java.util.List;
 

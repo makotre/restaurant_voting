@@ -1,7 +1,9 @@
-package com.github.makotre.bootjava.user.model;
+package com.github.makotre.bootjava.vote.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.makotre.bootjava.menu.model.Restaurant;
+import com.github.makotre.bootjava.user.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

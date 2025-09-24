@@ -1,16 +1,16 @@
-package com.github.makotre.bootjava.user.service;
+package com.github.makotre.bootjava.menu.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.makotre.bootjava.app.AuthUser;
 import com.github.makotre.bootjava.common.error.DataConflictException;
-import com.github.makotre.bootjava.user.model.Restaurant;
+import com.github.makotre.bootjava.menu.model.Restaurant;
 import com.github.makotre.bootjava.user.model.User;
-import com.github.makotre.bootjava.user.model.Vote;
-import com.github.makotre.bootjava.user.repository.RestaurantRepository;
+import com.github.makotre.bootjava.vote.model.Vote;
+import com.github.makotre.bootjava.menu.repository.RestaurantRepository;
 import com.github.makotre.bootjava.user.repository.UserRepository;
-import com.github.makotre.bootjava.user.repository.VoteRepository;
+import com.github.makotre.bootjava.vote.repository.VoteRepository;
 
 import java.time.Clock;
 import java.time.LocalDate;

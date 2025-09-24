@@ -1,4 +1,4 @@
-package com.github.makotre.bootjava.user.web;
+package com.github.makotre.bootjava.menu.web;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +8,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.github.makotre.bootjava.AbstractControllerTest;
 import com.github.makotre.bootjava.common.util.JsonUtil;
-import com.github.makotre.bootjava.user.model.Restaurant;
-import com.github.makotre.bootjava.user.repository.RestaurantRepository;
+import com.github.makotre.bootjava.menu.model.Restaurant;
+import com.github.makotre.bootjava.menu.repository.RestaurantRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,11 +21,11 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.github.makotre.bootjava.user.RestaurantTestData.*;
-import static com.github.makotre.bootjava.user.RestaurantTestData.getNew;
-import static com.github.makotre.bootjava.user.RestaurantTestData.getUpdated;
+import static com.github.makotre.bootjava.menu.RestaurantTestData.*;
+import static com.github.makotre.bootjava.menu.RestaurantTestData.getNew;
+import static com.github.makotre.bootjava.menu.RestaurantTestData.getUpdated;
 import static com.github.makotre.bootjava.user.UserTestData.*;
-import static com.github.makotre.bootjava.user.web.RestaurantController.REST_URL;
+import static com.github.makotre.bootjava.menu.web.RestaurantController.REST_URL;
 
 public class RestaurantControllerTest extends AbstractControllerTest {
 

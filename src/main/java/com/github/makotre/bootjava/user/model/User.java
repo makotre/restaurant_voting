@@ -1,6 +1,7 @@
 package com.github.makotre.bootjava.user.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.makotre.bootjava.vote.model.Vote;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

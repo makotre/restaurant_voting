@@ -1,4 +1,4 @@
-package com.github.makotre.bootjava.user.model;
+package com.github.makotre.bootjava.menu.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

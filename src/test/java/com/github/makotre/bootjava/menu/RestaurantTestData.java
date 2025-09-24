@@ -1,12 +1,12 @@
-package com.github.makotre.bootjava.user;
+package com.github.makotre.bootjava.menu;
 
 import com.github.makotre.bootjava.MatcherFactory;
-import com.github.makotre.bootjava.user.model.Restaurant;
+import com.github.makotre.bootjava.menu.model.Restaurant;
 
 import java.time.LocalDate;
 
-import static com.github.makotre.bootjava.user.DishTestData.r1Dishes;
-import static com.github.makotre.bootjava.user.DishTestData.r2Dishes;
+import static com.github.makotre.bootjava.menu.DishTestData.r1Dishes;
+import static com.github.makotre.bootjava.menu.DishTestData.r2Dishes;
 
 public class RestaurantTestData {
     public static final MatcherFactory.Matcher<Restaurant> R_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Restaurant.class, "dishes");

@@ -1,4 +1,4 @@
-package com.github.makotre.bootjava.user.web;
+package com.github.makotre.bootjava.vote.web;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static com.github.makotre.bootjava.user.UserTestData.ADMIN_MAIL;
-import static com.github.makotre.bootjava.user.web.VoteController.REST_URL;
+import static com.github.makotre.bootjava.vote.web.VoteController.REST_URL;
 
 public class VoteControllerTest extends AbstractControllerTest {
 

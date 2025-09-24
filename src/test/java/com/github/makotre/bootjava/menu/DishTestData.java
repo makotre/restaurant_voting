@@ -1,7 +1,7 @@
-package com.github.makotre.bootjava.user;
+package com.github.makotre.bootjava.menu;
 
 import com.github.makotre.bootjava.MatcherFactory;
-import com.github.makotre.bootjava.user.model.Dish;
+import com.github.makotre.bootjava.menu.model.Dish;
 
 import java.util.List;
 
