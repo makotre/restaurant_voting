@@ -8,8 +8,8 @@
         <version>3.3.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>ru.javaops</groupId>
-    <artifactId>bootjava</artifactId>
+    <groupId>com.github.makotre</groupId>
+    <artifactId>restaurantVoting</artifactId>
     <version>1.0</version>
     <name>BootJava</name>
     <description>Spring Boot 3.x HATEOAS application (BootJava)</description>
