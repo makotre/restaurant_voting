@@ -137,7 +137,7 @@ public class DishControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void createInvalid() throws Exception {
-        Dish invalid = new Dish(null, null, 0);
+        Dish invalid = new Dish(null, null, 0, null);
         perform(MockMvcRequestBuilders.post(REST_URL + "/admin/restaurants/1/dishes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(invalid)))
@@ -148,7 +148,7 @@ public class DishControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void updateInvalid() throws Exception {
-        Dish invalid = new Dish(DISH1_ID, null, 0);
+        Dish invalid = new Dish(DISH1_ID, null, 0, null);
         perform(MockMvcRequestBuilders.post(REST_URL_SLASH_ADMIN + DISH1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(invalid)))
@@ -171,7 +171,7 @@ public class DishControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void createDuplicate() throws Exception {
-        Dish duplicate = new Dish(null, dish1.getName(), 10);
+        Dish duplicate = new Dish(null, dish1.getName(), 10, dish1.getServingDate());
         perform(MockMvcRequestBuilders.post(REST_URL + "/admin/restaurants/1/dishes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(duplicate)))
@@ -183,7 +183,7 @@ public class DishControllerTest extends AbstractControllerTest {
     @Transactional(propagation = Propagation.NEVER)
     @WithUserDetails(value = ADMIN_MAIL)
     void updateDuplicate() throws Exception {
-        Dish duplicate = new Dish(DISH1_ID, dish2.getName(), 10);
+        Dish duplicate = new Dish(DISH1_ID, dish2.getName(), 10, dish1.getServingDate());
         perform(MockMvcRequestBuilders.put(REST_URL_SLASH_ADMIN + DISH1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(duplicate)))
@@ -199,7 +199,7 @@ public class DishControllerTest extends AbstractControllerTest {
                 .toInstant());
         when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
-        Dish dish = new Dish(null, dish1.getName(), 10);
+        Dish dish = new Dish(null, dish1.getName(), 10, dish1.getServingDate());
         perform(MockMvcRequestBuilders.post(REST_URL + "/admin/restaurants/1/dishes")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(dish)))

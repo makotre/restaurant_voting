@@ -1,7 +1,7 @@
 package com.github.makotre.bootjava.vote.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.makotre.bootjava.common.model.BaseEntity;
 import com.github.makotre.bootjava.menu.model.Restaurant;
 import com.github.makotre.bootjava.user.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,12 +10,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import com.github.makotre.bootjava.common.model.BaseEntity;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "vote", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date_time"}, name = "vote_unique_user_datetime_idx")})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,6 +29,7 @@ public class Vote extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @Schema(hidden = true)
     @JsonIgnore
     private Restaurant restaurant;
@@ -37,24 +38,15 @@ public class Vote extends BaseEntity {
     @NotNull
     private LocalDateTime dateTimeVoted;
 
-    @Column(name = "the_vote", nullable = false)
+    @Column(name = "choice", nullable = false)
     @NotNull
-    private boolean theVote;
+    private boolean choice;
 
-    public Vote(Integer id, User user, Restaurant restaurant, LocalDateTime dateTimeVoted, boolean theVote) {
+    public Vote(Integer id, User user, Restaurant restaurant, LocalDateTime dateTimeVoted, boolean choice) {
         super(id);
         this.user = user;
         this.restaurant = restaurant;
         this.dateTimeVoted = dateTimeVoted;
-        this.theVote = theVote;
-    }
-
-    @JsonProperty("userId")
-    public Integer getUserId() {
-        return user != null ? user.getId() : null;
-    }
-    @JsonProperty("restaurantId")
-    public Integer getRestaurantId() {
-        return restaurant != null ? restaurant.getId() : null;
+        this.choice = choice;
     }
 }

@@ -8,16 +8,16 @@ VALUES ('USER', 1),
        ('ADMIN', 2),
        ('USER', 2);
 
-INSERT INTO RESTAURANT (name, voters_count)
-VALUES ('MacDac', 0),
-       ('KeeFCi', 0);
+INSERT INTO RESTAURANT (name)
+VALUES ('MacDac'),
+       ('KeeFCi');
 
-INSERT INTO DISH (name, price, r_id, create_date)
-VALUES ('Breakfast', 50, 1, NOW()),
-       ('Lunch', 10, 1, NOW()),
-       ('AfterLunch', 50, 1, NOW()),
-       ('Soop', 60, 1, NOW()),
-       ('Potato', 30, 1, NOW()),
-       ('Chachapuri', 15, 2, NOW()),
-       ('Tea', 10, 2, NOW()),
-       ('Coffee', 15, 2, NOW());
+INSERT INTO DISH (name, price, r_id, serving_date)
+VALUES ('Breakfast', 50, 1, '2025-09-26'),
+       ('Lunch', 10, 1, '2025-09-26'),
+       ('AfterLunch', 50, 1, '2025-09-26'),
+       ('Soop', 60, 1, '2025-09-27'),
+       ('Potato', 30, 1, '2025-09-27'),
+       ('Chachapuri', 15, 2, '2025-09-26'),
+       ('Tea', 10, 2, '2025-09-26'),
+       ('Coffee', 15, 2, '2025-09-26');

@@ -14,8 +14,8 @@ public class RestaurantTestData {
     public static final int R1_ID = 1;
     public static final int R2_ID = R1_ID + 1;
 
-    public static final Restaurant restaurant1 = new Restaurant(R1_ID, "MacDac", 0, LocalDate.now());
-    public static final Restaurant restaurant2 = new Restaurant(R2_ID, "KeeFCi", 0, LocalDate.now());
+    public static final Restaurant restaurant1 = new Restaurant(R1_ID, "MacDac");
+    public static final Restaurant restaurant2 = new Restaurant(R2_ID, "KeeFCi");
 
     static {
         restaurant1.setDishes(r1Dishes);
@@ -23,10 +23,10 @@ public class RestaurantTestData {
     }
 
     public static Restaurant getNew() {
-        return new Restaurant(null, "New", 0, LocalDate.now());
+        return new Restaurant(null, "New");
     }
 
     public static Restaurant getUpdated() {
-        return new Restaurant(R1_ID, "UpdatedName", 0, LocalDate.now());
+        return new Restaurant(R1_ID, "UpdatedName");
     }
 }

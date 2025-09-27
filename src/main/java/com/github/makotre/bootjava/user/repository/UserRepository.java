@@ -15,6 +15,9 @@ public interface UserRepository extends BaseRepository<User> {
     @Query("SELECT u FROM User u WHERE u.email = LOWER(:email)")
     Optional<User> findByEmailIgnoreCase(String email);
 
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.votes WHERE u.id = :id")
+    User getWithVotes(int id);
+
     @Transactional
     default User prepareAndSave(User user) {
         user.setPassword(PASSWORD_ENCODER.encode(user.getPassword()));

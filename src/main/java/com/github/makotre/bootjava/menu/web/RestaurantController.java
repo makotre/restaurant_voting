@@ -1,20 +1,17 @@
 package com.github.makotre.bootjava.menu.web;
 
+import com.github.makotre.bootjava.common.validation.ValidationUtil;
+import com.github.makotre.bootjava.menu.model.Restaurant;
+import com.github.makotre.bootjava.menu.repository.RestaurantRepository;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.github.makotre.bootjava.app.AuthUser;
-import com.github.makotre.bootjava.common.validation.ValidationUtil;
-import com.github.makotre.bootjava.menu.model.Restaurant;
-import com.github.makotre.bootjava.menu.repository.RestaurantRepository;
-import com.github.makotre.bootjava.menu.service.RestaurantService;
 
 import java.net.URI;
 import java.util.List;
@@ -26,13 +23,10 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class RestaurantController {
     static final String REST_URL = "/api";
 
-    protected final Logger log = getLogger(getClass());
+    private final Logger log = getLogger(getClass());
 
     @Autowired
     private RestaurantRepository repository;
-
-    @Autowired
-    private RestaurantService service;
 
     @GetMapping("/restaurants/{id}")
     public Restaurant get(@PathVariable int id) {
@@ -72,13 +66,5 @@ public class RestaurantController {
         log.info("update {}", restaurant);
         ValidationUtil.assureIdConsistent(restaurant, id);
         repository.save(restaurant);
-    }
-
-    @PatchMapping("/restaurants/vote/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Transactional
-    public void vote(@PathVariable int id, @RequestParam boolean vote, @AuthenticationPrincipal AuthUser authUser) {
-        log.info("user {} " + (vote ? "vote restaurant {}" : "unvote restaurant {}"), authUser.id(), id);
-        service.vote(id, vote, authUser);
     }
 }

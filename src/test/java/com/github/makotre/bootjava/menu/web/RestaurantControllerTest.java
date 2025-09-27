@@ -111,7 +111,7 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void createInvalid() throws Exception {
-        Restaurant invalid = new Restaurant(null, null, 0, LocalDate.now());
+        Restaurant invalid = new Restaurant(null, null);
         perform(MockMvcRequestBuilders.post(REST_URL + "/admin/restaurants")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(invalid)))
@@ -122,7 +122,7 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void updateInvalid() throws Exception {
-        Restaurant invalid = new Restaurant(R1_ID, null, 0, null);
+        Restaurant invalid = new Restaurant(R1_ID, null);
         perform(MockMvcRequestBuilders.put(REST_URL_SLASH_ADMIN + R1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(invalid)))
@@ -142,17 +142,17 @@ public class RestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(status().isUnprocessableEntity());
     }
 
-    @Test
-    @WithUserDetails(value = USER_MAIL)
-    void vote() throws Exception {
-        int expectedCount = repository.getExisted(R1_ID).getVotersCount() + 1;
-        perform(MockMvcRequestBuilders.patch(REST_URL_SLASH + "vote/" + R1_ID)
-                .param("vote", "true")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isNoContent());
-        assertEquals(expectedCount, repository.getExisted(R1_ID).getVotersCount());
-    }
+//    @Test
+//    @WithUserDetails(value = USER_MAIL)
+//    void vote() throws Exception {
+//        int expectedCount = repository.getExisted(R1_ID).getVotersCount() + 1;
+//        perform(MockMvcRequestBuilders.patch(REST_URL_SLASH + "vote/" + R1_ID)
+//                .param("vote", "true")
+//                .contentType(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isNoContent());
+//        assertEquals(expectedCount, repository.getExisted(R1_ID).getVotersCount());
+//    }
 
     @Test
     @WithUserDetails(value = USER_MAIL)

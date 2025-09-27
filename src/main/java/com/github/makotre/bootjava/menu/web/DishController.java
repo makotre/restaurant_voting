@@ -1,22 +1,24 @@
 package com.github.makotre.bootjava.menu.web;
 
-import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.github.makotre.bootjava.common.validation.ValidationUtil;
 import com.github.makotre.bootjava.menu.model.Dish;
 import com.github.makotre.bootjava.menu.model.Restaurant;
 import com.github.makotre.bootjava.menu.repository.DishRepository;
 import com.github.makotre.bootjava.menu.repository.RestaurantRepository;
-import com.github.makotre.bootjava.menu.service.RestaurantService;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -32,30 +34,44 @@ public class DishController {
     private DishRepository dishRepository;
 
     @Autowired
-    private RestaurantRepository repository;
-
-    @Autowired
-    private RestaurantService restaurantService;
+    private RestaurantRepository restaurantRepository;
 
     @GetMapping("/restaurants/{rId}/dishes")
     public List<Dish> getAll(@PathVariable int rId) {
         log.info("getAll dishes for restaurant {}", rId);
-        repository.getExisted(rId);
+        restaurantRepository.getExisted(rId);
         return dishRepository.getAll(rId);
     }
 
     @GetMapping("/restaurants/{rId}/dishes/{id}")
     public Dish get(@PathVariable int rId, @PathVariable int id) {
         log.info("get dish {} from restaurant {}", id, rId);
-        repository.getExisted(rId);
+        restaurantRepository.getExisted(rId);
         return dishRepository.getBelonged(id, rId);
+    }
+
+    @GetMapping("/restaurants/{rId}/dishes/by-date")
+    public List<Dish> getByDate(@PathVariable int rId,
+                                @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        log.info("get menu for a date {} from restaurant {} ", date, rId);
+        return dishRepository.getAll(rId).stream()
+                .filter(dish -> dish.getServingDate().equals(date))
+                .toList();
+    }
+
+    @GetMapping("/restaurants/dishes/by-date")
+    public List<Dish> getInAllByDate(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        log.info("get All menu from all restaurants for a date {}", date);
+        return dishRepository.findAll().stream()
+                .filter(dish -> dish.getServingDate().equals(date))
+                .toList();
     }
 
     @DeleteMapping("/admin/restaurants/{rId}/dishes/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int rId, @PathVariable int id) {
         log.info("delete dish {} in restaurant {}", id, rId);
-        repository.getExisted(rId);
+        restaurantRepository.getExisted(rId);
         Dish dish = dishRepository.getBelonged(id, rId);
         dishRepository.delete(dish);
     }
@@ -66,8 +82,7 @@ public class DishController {
     public ResponseEntity<Dish> createWithLocation(@Valid @RequestBody Dish dish, @PathVariable int rId) {
         log.info("create dish {} in restaurant {}", dish, rId);
         ValidationUtil.checkNew(dish);
-        Restaurant restaurant = repository.getExisted(rId);
-        restaurantService.checkFromToday(restaurant);
+        Restaurant restaurant = restaurantRepository.getExisted(rId);
         dish.setRestaurant(restaurant);
         Dish created = dishRepository.save(dish);
         URI uriOfNewResponse = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -81,8 +96,7 @@ public class DishController {
     public void update(@Valid @RequestBody Dish dish, @PathVariable int rId, @PathVariable int id) {
         log.info("update dish {} in restaurant {}", dish, rId);
         ValidationUtil.assureIdConsistent(dish, id);
-        Restaurant restaurant = repository.getExisted(rId);
-        restaurantService.checkFromToday(restaurant);
+        Restaurant restaurant = restaurantRepository.getExisted(rId);
         dish.setRestaurant(restaurant);
         dishRepository.getBelonged(id, rId);
         dishRepository.save(dish);
