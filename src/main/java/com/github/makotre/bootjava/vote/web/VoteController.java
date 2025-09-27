@@ -5,7 +5,7 @@ import com.github.makotre.bootjava.vote.model.Vote;
 import com.github.makotre.bootjava.vote.repository.VoteRepository;
 import com.github.makotre.bootjava.vote.service.VoteService;
 import com.github.makotre.bootjava.vote.to.VoteTo;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,14 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
+@Slf4j
 @RestController
 @RequestMapping(value = VoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteController {
     static final String REST_URL = "/api/votes";
-
-    private final Logger log = getLogger(getClass());
 
     @Autowired
     private VoteRepository voteRepository;

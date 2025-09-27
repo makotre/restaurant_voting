@@ -8,6 +8,8 @@ import com.github.makotre.bootjava.menu.repository.RestaurantRepository;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,6 +38,7 @@ public class DishController {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Cacheable(value = "dishes", key = "#rId")
     @GetMapping("/restaurants/{rId}/dishes")
     public List<Dish> getAll(@PathVariable int rId) {
         log.info("getAll dishes for restaurant {}", rId);
@@ -50,6 +53,7 @@ public class DishController {
         return dishRepository.getBelonged(id, rId);
     }
 
+    @Cacheable(value = "dishes", key = "#rId")
     @GetMapping("/restaurants/{rId}/dishes/by-date")
     public List<Dish> getByDate(@PathVariable int rId,
                                 @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
@@ -59,6 +63,7 @@ public class DishController {
                 .toList();
     }
 
+    @Cacheable("dishes")
     @GetMapping("/restaurants/dishes/by-date")
     public List<Dish> getInAllByDate(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("get All menu from all restaurants for a date {}", date);
@@ -67,6 +72,7 @@ public class DishController {
                 .toList();
     }
 
+    @CacheEvict(value = "dishes", allEntries = true)
     @DeleteMapping("/admin/restaurants/{rId}/dishes/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int rId, @PathVariable int id) {
@@ -76,6 +82,7 @@ public class DishController {
         dishRepository.delete(dish);
     }
 
+    @CacheEvict(value = "dishes", allEntries = true)
     @PostMapping(value = "/admin/restaurants/{rId}/dishes", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
@@ -90,6 +97,7 @@ public class DishController {
         return ResponseEntity.created(uriOfNewResponse).body(created);
     }
 
+    @CacheEvict(value = "dishes", allEntries = true)
     @PutMapping(value = "/admin/restaurants/{rId}/dishes/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional

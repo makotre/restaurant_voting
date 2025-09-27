@@ -4,8 +4,10 @@ import com.github.makotre.bootjava.common.validation.ValidationUtil;
 import com.github.makotre.bootjava.menu.model.Restaurant;
 import com.github.makotre.bootjava.menu.repository.RestaurantRepository;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +18,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
+@Slf4j
 @RestController
 @RequestMapping(value = RestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController {
     static final String REST_URL = "/api";
-
-    private final Logger log = getLogger(getClass());
 
     @Autowired
     private RestaurantRepository repository;
@@ -34,6 +33,7 @@ public class RestaurantController {
         return repository.getExisted(id);
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     @DeleteMapping("/admin/restaurants/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
@@ -41,12 +41,14 @@ public class RestaurantController {
         repository.deleteExisted(id);
     }
 
+    @Cacheable("restaurants")
     @GetMapping("/restaurants")
     public List<Restaurant> getAll() {
         log.info("getAll restaurants");
         return repository.findAll();
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     @PostMapping(value = "/admin/restaurants", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
@@ -59,6 +61,7 @@ public class RestaurantController {
         return ResponseEntity.created(uriOfNewResponse).body(created);
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     @PutMapping(value = "/admin/restaurants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
