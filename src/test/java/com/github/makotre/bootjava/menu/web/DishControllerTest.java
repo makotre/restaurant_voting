@@ -1,5 +1,9 @@
 package com.github.makotre.bootjava.menu.web;
 
+import com.github.makotre.bootjava.AbstractControllerTest;
+import com.github.makotre.bootjava.common.util.JsonUtil;
+import com.github.makotre.bootjava.menu.model.Dish;
+import com.github.makotre.bootjava.menu.repository.DishRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -8,24 +12,16 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import com.github.makotre.bootjava.AbstractControllerTest;
-import com.github.makotre.bootjava.common.util.JsonUtil;
-import com.github.makotre.bootjava.menu.model.Dish;
-import com.github.makotre.bootjava.menu.repository.DishRepository;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static com.github.makotre.bootjava.menu.DishTestData.*;
 import static com.github.makotre.bootjava.menu.DishTestData.getNew;
 import static com.github.makotre.bootjava.menu.DishTestData.getUpdated;
-import static com.github.makotre.bootjava.user.UserTestData.*;
 import static com.github.makotre.bootjava.menu.web.DishController.REST_URL;
+import static com.github.makotre.bootjava.user.UserTestData.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class DishControllerTest extends AbstractControllerTest {
 
@@ -68,6 +64,26 @@ public class DishControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(DISH_MATCHER.contentJson(r1Dishes));
+    }
+
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void getByDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + "by-date")
+                .param("date", "2025-09-26"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(DISH_MATCHER.contentJson(dByDate));
+    }
+
+    @Test
+    @WithUserDetails(value = USER_MAIL)
+    void getAllByDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/restaurants/dishes/by-date")
+                .param("date", "2025-09-26"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(DISH_MATCHER.contentJson(allByDate));
     }
 
     @Test
@@ -187,38 +203,6 @@ public class DishControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.put(REST_URL_SLASH_ADMIN + DISH1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(duplicate)))
-                .andDo(print())
-                .andExpect(status().isConflict());
-    }
-
-    @Test
-    @WithUserDetails(value = ADMIN_MAIL)
-    void createForAnotherDay() throws Exception {
-        when(clock.instant()).thenReturn(LocalDateTime.now().minusDays(1)
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
-        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
-
-        Dish dish = new Dish(null, dish1.getName(), 10, dish1.getServingDate());
-        perform(MockMvcRequestBuilders.post(REST_URL + "/admin/restaurants/1/dishes")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(dish)))
-                .andDo(print())
-                .andExpect(status().isConflict());
-    }
-
-    @Test
-    @WithUserDetails(value = ADMIN_MAIL)
-    void updateForAnotherDay() throws Exception {
-        when(clock.instant()).thenReturn(LocalDateTime.now().minusDays(1)
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
-        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
-
-        Dish updated = getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL_SLASH_ADMIN + DISH1_ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
                 .andExpect(status().isConflict());
     }

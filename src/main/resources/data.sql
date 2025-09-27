@@ -21,3 +21,6 @@ VALUES ('Breakfast', 50, 1, '2025-09-26'),
        ('Chachapuri', 15, 2, '2025-09-26'),
        ('Tea', 10, 2, '2025-09-26'),
        ('Coffee', 15, 2, '2025-09-26');
+
+INSERT INTO VOTE (user_id, restaurant_id, date_time, choice)
+VALUES (1, 1, '2025-09-26 10:00', true)

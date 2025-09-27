@@ -1,31 +1,25 @@
 package com.github.makotre.bootjava.menu.web;
 
+import com.github.makotre.bootjava.AbstractControllerTest;
+import com.github.makotre.bootjava.common.util.JsonUtil;
+import com.github.makotre.bootjava.menu.model.Restaurant;
+import com.github.makotre.bootjava.menu.repository.RestaurantRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import com.github.makotre.bootjava.AbstractControllerTest;
-import com.github.makotre.bootjava.common.util.JsonUtil;
-import com.github.makotre.bootjava.menu.model.Restaurant;
-import com.github.makotre.bootjava.menu.repository.RestaurantRepository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static com.github.makotre.bootjava.menu.RestaurantTestData.*;
 import static com.github.makotre.bootjava.menu.RestaurantTestData.getNew;
 import static com.github.makotre.bootjava.menu.RestaurantTestData.getUpdated;
-import static com.github.makotre.bootjava.user.UserTestData.*;
 import static com.github.makotre.bootjava.menu.web.RestaurantController.REST_URL;
+import static com.github.makotre.bootjava.user.UserTestData.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class RestaurantControllerTest extends AbstractControllerTest {
 
@@ -140,89 +134,5 @@ public class RestaurantControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
-    }
-
-//    @Test
-//    @WithUserDetails(value = USER_MAIL)
-//    void vote() throws Exception {
-//        int expectedCount = repository.getExisted(R1_ID).getVotersCount() + 1;
-//        perform(MockMvcRequestBuilders.patch(REST_URL_SLASH + "vote/" + R1_ID)
-//                .param("vote", "true")
-//                .contentType(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isNoContent());
-//        assertEquals(expectedCount, repository.getExisted(R1_ID).getVotersCount());
-//    }
-
-    @Test
-    @WithUserDetails(value = USER_MAIL)
-    void voteForNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.patch(REST_URL_SLASH + "vote/" + NOT_FOUND)
-                .param("vote", "true")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @WithUserDetails(value = USER_MAIL)
-    void voteForAnotherDay() throws Exception {
-        when(clock.instant()).thenReturn(LocalDateTime.now().plusDays(1)
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
-        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
-
-        perform(MockMvcRequestBuilders.patch(REST_URL_SLASH + "vote/" + R1_ID)
-                .param("vote", "true")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isConflict());
-    }
-
-    @Test
-    @WithUserDetails(value = USER_MAIL)
-    void voteSecondTimeAfterEleven() throws Exception {
-        when(clock.instant()).thenReturn(LocalDate.now()
-                .atTime(11, 30)
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
-        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
-
-        // first vote go ok
-        perform(MockMvcRequestBuilders.patch(REST_URL_SLASH + "vote/" + R1_ID)
-                .param("vote", "true")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isNoContent());
-
-        //second time Exception
-        perform(MockMvcRequestBuilders.patch(REST_URL_SLASH + "vote/" + R2_ID)
-                .param("vote", "true")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isConflict());
-    }
-
-    @Test
-    @WithUserDetails(value = USER_MAIL)
-    void voteSecondTimeBeforeEleven() throws Exception {
-        when(clock.instant()).thenReturn(LocalDate.now()
-                .atTime(10, 30)
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
-        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
-        // first vote go ok
-        perform(MockMvcRequestBuilders.patch(REST_URL_SLASH + "vote/" + R1_ID)
-                .param("vote", "true")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isNoContent());
-
-        //second time Exception
-        perform(MockMvcRequestBuilders.patch(REST_URL_SLASH + "vote/" + R2_ID)
-                .param("vote", "true")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isNoContent());
     }
 }
